@@ -1,4 +1,7 @@
 const genrateCaption = require("../services/ai.service");
+const { v4: uuidv4 } = require("uuid");
+const upladFile = require("../services/storage.service");
+const postModel = require("../models/post.model");
 
 const createPostController = async (req, res) => {
   try {
@@ -10,9 +13,17 @@ const createPostController = async (req, res) => {
 
     const caption = await genrateCaption(base64Image, prompt);
 
+    const result = await upladFile(file.buffer, uuidv4());
+
+    const post = await postModel.create({
+      image: result.url,
+      caption: caption,
+      user: req.user._id,
+    });
+
     return res.status(200).json({
-      message: "Create post route working 👍",
-      caption,
+      message: "Post created successfully",
+      post,
     });
   } catch (error) {
     return res.status(500).json({
