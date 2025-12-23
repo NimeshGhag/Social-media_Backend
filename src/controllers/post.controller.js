@@ -34,4 +34,18 @@ const createPostController = async (req, res) => {
   }
 };
 
-module.exports = { createPostController };
+const getPostsController = async (req, res) => {
+try {
+  const posts = await postModel.find({}).populate("user", "name email");
+  return res.status(200).json({
+    message: "Posts fetched successfully",
+    posts,
+  });
+} catch (error) {
+  return res.status(500).json({
+    message: "Something went wrong",
+    error: error.message,
+  });
+}
+};
+module.exports = { createPostController, getPostsController };
