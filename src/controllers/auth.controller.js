@@ -51,14 +51,30 @@ const loginController = async (req, res) => {
   }
 
   const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET);
-  res.cookie("token", token,{expries: new Date(Date.now()+ + 1000 * 60 * 60 * 24 * 7)});
+  res.cookie("token", token, {
+    expries: new Date(Date.now() + +1000 * 60 * 60 * 24 * 7),
+  });
 
   res.status(200).json({
     message: "User Login Successfully",
   });
 };
 
+const logoutController = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({
+      message: "User Logged Out Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+    }); 
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
+  logoutController,
 };
