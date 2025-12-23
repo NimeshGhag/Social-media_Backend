@@ -11,9 +11,10 @@ const createPostController = async (req, res) => {
 
     const { prompt } = req.body;
 
-    const caption = await genrateCaption(base64Image, prompt);
-
-    const result = await upladFile(file.buffer, uuidv4());
+    const [caption, result] = await Promise.all([
+      genrateCaption(base64Image, prompt),
+      upladFile(file.buffer, uuidv4()),
+    ]);
 
     const post = await postModel.create({
       image: result.url,
