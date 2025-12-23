@@ -1,8 +1,10 @@
+
+
 const createPostController = async (req, res) => {
   try {
     const file = req.file;
-    const { prompt } = req.body;
 
+    const { prompt } = req.body;
 
     return res.status(200).json({
       message: "Create post route working 👍",
